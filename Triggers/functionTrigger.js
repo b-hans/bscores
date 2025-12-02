@@ -9,6 +9,7 @@ function functionTrigger (e) {
     try {
 
         action = sheet.getRange("B1");
+        folder = sheet.getRange("A1");
 
         let folderValue = sheet.getRange("A1").getValue();
         let actionValue = action.getValue();
@@ -55,6 +56,9 @@ function functionTrigger (e) {
                 action.setValue("Functions");
                 return;
             }
+
+            action.setValue("Functions");
+            folder.setValue("New folders");
 
             setStatus("create");
 

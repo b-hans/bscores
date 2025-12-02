@@ -2,10 +2,21 @@ function clearStatus () {
     setStatus("free");
 
     sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(MAIN_SHEET);
+
+    form = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(FORM_SHEET);
     errorCell = sheet.getRange(ERROR_RANGE);
 
     sheet.getRange('A1').setValue("New folders");
     sheet.getRange('B1').setValue("Functions");
+
+    form.getRange(TITLE_RANGE).setValue('');
+    form.getRange(COMPOSER_RANGE).setValue('');
+    form.getRange(LYRICS_RANGE).setValue('');
+    form.getRange(ARRANGER_RANGE).setValue('');
+    form.getRange(ID_RANGE).setValue('');
+    form.getRange(FORM_ACTIONS_RANGE).setValue('Actions');
+
+
 
     errorCell.setValue("Clear complete");
 }
