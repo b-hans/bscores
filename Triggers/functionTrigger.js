@@ -1,6 +1,7 @@
 function functionTrigger (e) {
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(MAIN_SHEET);
     const errorCell = sheet.getRange("C1");
+    errorCell.setValue('');
 
     let folder;
     let action;
@@ -18,21 +19,47 @@ function functionTrigger (e) {
         }
 
         if (actionValue == "Refresh") {
-            errorCell.setValue("Refreshing folders");
-            openTrigger (e);
 
-            action.setValue("Functions");
-            return;
+            if (getStatus() != "free") {
+                errorCell.setValue ("Check status: " + getStatus());
+                return false;
+            }
+            else {
+                setStatus("refresh");
+            } 
+
+
+            try {
+                errorCell.setValue("Refreshing folders");
+                openTrigger (e);
+
+                action.setValue("Functions");
+                errorCell.setValue("Refresh complete");
+
+                setStatus("free");
+                return;
+            } catch (error) {
+                errorCell.setValue("Error refreshing: " + error);
+                setStatus("free");
+                return;
+            }
         }
 
         if (actionValue == "Create document") {
-            if (folderValue == "New folders") {
+            if (getStatus() != "free") {
+                errorCell.setValue("Check current status: " + getStatus());               
+                return false;
+            }
+            else if (folderValue == "New folders") {
                 errorCell.setValue("You haven't selected a document folder");
                 action.setValue("Functions");
                 return;
             }
+
+            setStatus("create");
+
+            return createForm();
             
-            errorCell.setValue("Create document: " + folderValue);
         }
 
     } catch (error) {

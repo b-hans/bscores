@@ -4,12 +4,27 @@ function openTrigger(e) {
     let folder;
     let errorCell;
     let subFolders;
+    let scriptStatus;
 
     try {
-
         sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Main');
-
         errorCell = sheet.getRange('C1');
+    } catch (error) {
+        console.log ("Error getting sheet: " + error);
+        return;
+    }
+
+    try {
+        scriptStatus = getStatus();
+        if (!scriptStatus) {
+            setStatus("free");
+        }
+    } catch (error) {
+        errorCell.setValue(error);
+        return false;
+    }
+
+    try {
 
         let params = {
             cell: errorCell,
@@ -20,7 +35,7 @@ function openTrigger(e) {
         errorCell.setValue("Getting folder information");
 
     } catch (e) {
-        console.log ("Couldn't get the sheet: " + e);
+        errorCell.setValue( "Couldn't get folder information: " + e );
         return false;
     }
 
