@@ -5,6 +5,12 @@ function createForm () {
 
     let errorCell;
 
+    let title;
+    let id;
+    let composer;
+    let lyricist;
+    let arranger;
+
     try {
         mainSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Main");
         formSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Form");
@@ -16,7 +22,20 @@ function createForm () {
         return false;
     }
 
-    formSheet.activate();
+    // get title here
+    try {
+        let folder = mainSheet.getRange(FOLDER_RANGE);
+
+        title = folder.getValue();
+
+        formSheet.getRange(TITLE_RANGE).setValue(title);
+
+        folder.setValue('New folders');
+        formSheet.activate();
+
+    } catch (error) {
+        console.log (error);
+    }
 
 
 }

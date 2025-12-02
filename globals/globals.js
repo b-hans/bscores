@@ -4,6 +4,7 @@ const FORM_SHEET = 'Form';
 const SCORES_FOLDER = '19FwqKmM-UzkHipGOetA6VP0Fujt9iajt';
 
 const ERROR_RANGE = "C1";
+const FOLDER_RANGE = "A1";
 const FORM_ERROR_RANGE = "D2";
 
 const TITLE_RANGE = "B2";

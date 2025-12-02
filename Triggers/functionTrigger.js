@@ -58,7 +58,7 @@ function functionTrigger (e) {
             }
 
             action.setValue("Functions");
-            folder.setValue("New folders");
+            // folder.setValue("New folders");
 
             setStatus("create");
 
