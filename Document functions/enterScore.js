@@ -22,6 +22,7 @@ function enterScore () {
         }
         else {
             formErrorCell.setValue(returnParams.message);
+            documentUrl = returnParams.scoreUrl;
         }
     }
     catch (error) {
@@ -36,7 +37,8 @@ function enterScore () {
 //             formSheet.getRange(COMPOSER_RANGE).getValue(),
 //             formSheet.getRange(LYRICS_RANGE).getValue(),
 //             formSheet.getRange(ARRANGER_RANGE).getValue(),
-//             formSheet.getRange(ID_RANGE).getValue()
+//             formSheet.getRange(ID_RANGE).getValue(),
+//             documentUrl
 //         ];
 
 //         // add to the main sheet

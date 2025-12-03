@@ -6,6 +6,7 @@ function makeDocument (title) {
     let formSheet;
     let formErrorCell;
     let score;
+    let scoreUrl;
 
     try {
         formSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(FORM_SHEET);
@@ -47,6 +48,9 @@ function makeDocument (title) {
         let scoreId = score.getId();
         let scoreFile = DriveApp.getFileById(scoreId);
         scoreFile.moveTo(parentFolder);
+        
+        scoreUrl = score.getUrl();
+        
     }
     catch (error) {
         return {
@@ -55,9 +59,38 @@ function makeDocument (title) {
         }
     }
 
+    // get the images
+    try {
+
+        let images = folder.searchFiles('mimeType = "' + MimeType.JPEG + '"');
+        let jpgFiles = [];
+
+        while (images.hasNext()) {
+            var file = images.next();
+            jpgFiles.push({
+                name: file.getName(),
+                id: file.getId(),
+                url: file.getUrl()
+            });
+        }
+
+        return {
+            error: true,
+            message: "number of images: " + jpgFiles.length
+        }
+
+    }
+    catch (error) {
+        return {
+            error: true,
+            message: "Error getting images: " + error
+        }
+    }
+
     return {
         error: false,
-        message: "Good folder: " + folder.getName()
+        message: "Good folder: " + folder.getName(),
+        scoreUrl: scoreUrl
     };
     
     
