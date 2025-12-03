@@ -1,10 +1,21 @@
 function functionTrigger (e) {
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(MAIN_SHEET);
+    const form = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(FORM_SHEET);
+    const formAction = form.getRange(FORM_ACTIONS_RANGE);
+    const formActionValue = formAction.getValue();
+    const formErrorCell = form.getRange(FORM_ERROR_RANGE);
+
     const errorCell = sheet.getRange("C1");
     errorCell.setValue('');
 
     let folder;
     let action;
+
+
+    let cancelMessage = (
+        "You are about to cancel create this document\n\n" +
+        "Are you sure you want to do this?"
+    );
 
     try {
 
@@ -13,16 +24,38 @@ function functionTrigger (e) {
 
         let folderValue = sheet.getRange("A1").getValue();
         let actionValue = action.getValue();
+        let response = form.getRange(RESPONSE_RANGE);
+        let responseValue = response.getValue();
 
-        if (actionValue == "Functions") {
+        if (actionValue == "Functions" && 
+            formActionValue == "Actions" &&
+            responseValue == "Select an option") {
             errorCell.setValue('');
             return;
+        }
+        else if (formActionValue == "Cancel" && responseValue == "Select an option") {
+            formErrorCell.setValue(cancelMessage);
+            form.showColumns(RESPONSE_COL);
+            // clearStatus();
+            return;
+        }
+        else if (responseValue == "No, return") {
+            response.setValue ("Select an option");
+            formErrorCell.setValue('');
+            formAction.setValue("Actions");
+            form.hideColumns(RESPONSE_COL);
+        }
+        else if (responseValue == "Yes, Do it!") {
+            form.hideColumns(RESPONSE_COL);
+            clearStatus();
+            sheet.activate();
         }
 
         if (actionValue == "Refresh") {
 
             if (getStatus() != "free") {
                 errorCell.setValue ("Check status: " + getStatus());
+                action.setValue("Functions");
                 return false;
             }
             else {
@@ -48,7 +81,8 @@ function functionTrigger (e) {
 
         if (actionValue == "Create document") {
             if (getStatus() != "free") {
-                errorCell.setValue("Check current status: " + getStatus());               
+                errorCell.setValue("Check current status: " + getStatus());  
+                action.setValue("Functions");             
                 return false;
             }
             else if (folderValue == "New folders") {
@@ -58,7 +92,6 @@ function functionTrigger (e) {
             }
 
             action.setValue("Functions");
-            // folder.setValue("New folders");
 
             setStatus("create");
 

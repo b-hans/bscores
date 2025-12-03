@@ -14,3 +14,6 @@ const ARRANGER_RANGE = "B8";
 const ID_RANGE = "B10";
 
 const FORM_ACTIONS_RANGE = "B12";
+
+const RESPONSE_COL = 7;
+const RESPONSE_RANGE = "G2";

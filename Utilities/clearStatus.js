@@ -14,7 +14,9 @@ function clearStatus () {
     form.getRange(LYRICS_RANGE).setValue('');
     form.getRange(ARRANGER_RANGE).setValue('');
     form.getRange(ID_RANGE).setValue('');
+    form.getRange(FORM_ERROR_RANGE).setValue('');
     form.getRange(FORM_ACTIONS_RANGE).setValue('Actions');
+    form.getRange(RESPONSE_RANGE).setValue('Select an option');
 
 
 

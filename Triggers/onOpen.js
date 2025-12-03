@@ -2,13 +2,17 @@ function openTrigger(e) {
 
     let sheet;
     let folder;
+    let folderSheet;
     let errorCell;
+    let formErrorCell;
     let subFolders;
     let scriptStatus;
 
     try {
         sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Main');
-        errorCell = sheet.getRange('C1');
+        folderSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Form');
+        errorCell = sheet.getRange(ERROR_RANGE);
+        formErrorCell = folderSheet.getRange(FORM_ERROR_RANGE);
     } catch (error) {
         console.log ("Error getting sheet: " + error);
         return;
@@ -32,6 +36,9 @@ function openTrigger(e) {
         }
 
         formatCell(params);
+        params.cell = formErrorCell;
+        formatCell(params);
+        
         errorCell.setValue("Getting folder information");
 
     } catch (e) {
