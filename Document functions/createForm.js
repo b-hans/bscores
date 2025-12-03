@@ -27,6 +27,7 @@ function createForm () {
         let folder = mainSheet.getRange(FOLDER_RANGE);
 
         title = folder.getValue();
+        setStatus (title, 'FOLDER_NAME');
         id = getNextId();
 
         formSheet.getRange(TITLE_RANGE).setValue(title);
