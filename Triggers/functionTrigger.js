@@ -49,6 +49,7 @@ function functionTrigger (e) {
         else if (responseValue == "Yes, Do it!") {
 
             if (getStatus() == "create_enter") {
+                formErrorCell.setValue("Working....");
                 return enterScore();
             }
             else {

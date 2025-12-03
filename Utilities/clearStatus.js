@@ -1,5 +1,6 @@
 function clearStatus () {
     setStatus("free");
+    setStatus('empty', 'FOLDER_NAME');
 
     sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(MAIN_SHEET);
 
@@ -18,7 +19,7 @@ function clearStatus () {
     form.getRange(FORM_ACTIONS_RANGE).setValue('Actions');
     form.getRange(RESPONSE_RANGE).setValue('Select an option');
 
-
+    form.hideColumns(RESPONSE_COL);
 
     errorCell.setValue("Clear complete");
 }

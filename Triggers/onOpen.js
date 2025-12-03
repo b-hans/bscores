@@ -1,4 +1,4 @@
-function openTrigger(e) {
+function openTrigger(e = null) {
 
     let sheet;
     let folder;

@@ -7,6 +7,7 @@ function makeDocument (title) {
     let formErrorCell;
     let score;
     let scoreUrl;
+    let jpgFiles;
 
     try {
         formSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(FORM_SHEET);
@@ -63,21 +64,30 @@ function makeDocument (title) {
     try {
 
         let images = folder.searchFiles('mimeType = "' + MimeType.JPEG + '"');
-        let jpgFiles = [];
+        jpgFiles = [];
 
         while (images.hasNext()) {
             var file = images.next();
             jpgFiles.push({
-                name: file.getName(),
-                id: file.getId(),
-                url: file.getUrl()
+                title: file.getName(),
+                fileId: file.getId(),
+                blob: file.getBlob(),
+                file: file
             });
         }
 
-        return {
-            error: true,
-            message: "number of images: " + jpgFiles.length
-        }
+        jpgFiles.sort ((a, b) => {
+            const numA = parseInt(a.title.match(/\d+/)[0]); // Extract number from string a
+            const numB = parseInt(b.title.match(/\d+/)[0]); // Extract number from string b
+
+            // Compare the numerical parts
+            if (numA !== numB) {
+                return numA - numB;
+            }
+
+            // If numbers are equal, compare the full strings lexicographically
+            return a.title.localeCompare(b.title);
+        });
 
     }
     catch (error) {
@@ -87,10 +97,61 @@ function makeDocument (title) {
         }
     }
 
+    try {
+        let body = score.getBody();
+        body.clear();
+        body.setAttributes(DOCUMENT_STYLE);
+
+        let curParagraph = null;
+
+        for (let i=0; i<jpgFiles.length; i++) {
+
+            if (!curParagraph) {
+                curParagraph = body.getParagraphs()[0];
+            }
+            else {
+                curParagraph = body.appendParagraph('');
+            }
+
+            let myImage = jpgFiles[i];
+
+            let inlineImage = curParagraph.appendInlineImage (myImage.blob);
+
+            let blobWidth = inlineImage.getWidth() / 670;
+            let blobHeight = inlineImage.getHeight() / 894;
+
+            let newDiv;
+
+            if (blobWidth > blobHeight) {
+                newDiv = blobWidth;
+            }
+            else {
+                newDiv = blobHeight;
+            }
+
+            let newWidth = inlineImage.getWidth() / newDiv;
+            let newHeight = inlineImage.getHeight() / newDiv;
+
+            inlineImage.setWidth(newWidth);
+            inlineImage.setHeight(newHeight);
+
+        }
+
+        score.saveAndClose();
+        folder.setTrashed(true);
+
+    }
+    catch (error) {
+        return {
+            error: true,
+            message: "Error inserting images into doc: " + error
+        }
+    }
+
     return {
         error: false,
-        message: "Good folder: " + folder.getName(),
-        scoreUrl: scoreUrl
+        message: "Num images: " + jpgFiles.length,
+        scoreUrl: scoreUrl,
     };
     
     

@@ -21,7 +21,6 @@ function enterScore () {
             formErrorCell.setValue("error: " + returnParams.message);
         }
         else {
-            formErrorCell.setValue(returnParams.message);
             documentUrl = returnParams.scoreUrl;
         }
     }
@@ -30,32 +29,36 @@ function enterScore () {
         return false;
     }
 
-//    try {    
-//         // get the params
-//         const params = [
-//             formSheet.getRange(TITLE_RANGE).getValue(),
-//             formSheet.getRange(COMPOSER_RANGE).getValue(),
-//             formSheet.getRange(LYRICS_RANGE).getValue(),
-//             formSheet.getRange(ARRANGER_RANGE).getValue(),
-//             formSheet.getRange(ID_RANGE).getValue(),
-//             documentUrl
-//         ];
+   try {    
+        // get the params
+        const params = [
+            formSheet.getRange(TITLE_RANGE).getValue(),
+            formSheet.getRange(COMPOSER_RANGE).getValue(),
+            formSheet.getRange(LYRICS_RANGE).getValue(),
+            formSheet.getRange(ARRANGER_RANGE).getValue(),
+            formSheet.getRange(ID_RANGE).getValue(),
+            documentUrl
+        ];
 
-//         // add to the main sheet
-//         let lastRow = mainSheet.getLastRow()+1;
+        // add to the main sheet
+        let lastRow = mainSheet.getLastRow()+1;
 
-//         let newRange = mainSheet.getRange(lastRow, 1, 1, params.length);
-//         newRange.setValues([params]);
-//     }
-//     catch (error) {
-//         formErrorCell.setValue(error);
-//     }
+        let newRange = mainSheet.getRange(lastRow, 1, 1, params.length);
+        newRange.setValues([params]);
+    }
+    catch (error) {
+        formErrorCell.setValue(error);
+    }
 
-    //temp
-    formSheet.getRange(RESPONSE_RANGE).setValue("Select an option");
-    formSheet.hideColumns(RESPONSE_COL);
+    clearStatus();
+    openTrigger();
+    mainSheet.activate();
 
-    setStatus('create');
+    // //temp
+    // formSheet.getRange(RESPONSE_RANGE).setValue("Select an option");
+    // formSheet.hideColumns(RESPONSE_COL);
+
+    // setStatus('create');
 
     return true;
 }
