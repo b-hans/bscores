@@ -35,6 +35,7 @@ function functionTrigger (e) {
         }
         else if (formActionValue == "Cancel" && responseValue == "Select an option") {
             formErrorCell.setValue(cancelMessage);
+            formAction.setValue("Actions");
             form.showColumns(RESPONSE_COL);
             // clearStatus();
             return;
@@ -97,6 +98,11 @@ function functionTrigger (e) {
 
             return createForm();
             
+        }
+
+        if (formActionValue == "Enter") {
+            formAction.setValue("Actions");
+            return formEnterConfirm();
         }
 
     } catch (error) {
