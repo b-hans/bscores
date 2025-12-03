@@ -47,9 +47,15 @@ function functionTrigger (e) {
             form.hideColumns(RESPONSE_COL);
         }
         else if (responseValue == "Yes, Do it!") {
-            form.hideColumns(RESPONSE_COL);
-            clearStatus();
-            sheet.activate();
+
+            if (getStatus() == "create_enter") {
+                return enterScore();
+            }
+            else {
+                form.hideColumns(RESPONSE_COL);
+                clearStatus();
+                sheet.activate();
+            }
         }
 
         if (actionValue == "Refresh") {

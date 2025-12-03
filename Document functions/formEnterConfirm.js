@@ -9,6 +9,8 @@ function formEnterConfirm() {
     let arranger;
     let id;
 
+    const status = getStatus();
+
     try {
 
         formSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(FORM_SHEET);
@@ -20,6 +22,13 @@ function formEnterConfirm() {
         return false;
     }
 
+    if (status == "edit"){
+        formErrorCell.setValue ("Send this to edit");
+        return;
+    }
+    else {
+        setStatus('create_enter');
+    }
 
     try {
         title = formSheet.getRange(TITLE_RANGE).getValue();
@@ -28,7 +37,7 @@ function formEnterConfirm() {
         arranger = formSheet.getRange(ARRANGER_RANGE).getValue();
         id = formSheet.getRange(ID_RANGE).getValue();
 
-        let text = "You are about to enter, check values:" +
+        let text = "You are about to enter, check values:\n" +
             "title: " + title + "\n" +
             "composer: " + composer + "\n" +
             "lyricist: " + lyricist + "\n" +
